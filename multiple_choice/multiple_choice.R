@@ -101,6 +101,25 @@ item <- colSums(correct)
 summary(score)
 summary(item)
 
+# add data glimpse for slides
+library(gtsummary)
+library(gt)
+library(tidyverse)
+
+responses |>
+  as_tibble() %>%
+  rownames_to_column(var = "student") |> 
+  gt_preview() |> 
+  gtsave("figs/multiple_choice_test_answers.png")
+
+correct |>
+  data.frame() |> 
+  as_tibble() |> 
+  rename_all(.funs = ~ gsub("X","Q", .x)) %>%
+  rownames_to_column(var = "student") |> 
+  gt_preview() |> 
+  gtsave("figs/multiple_choice_test_correct.png")
+
 score_jitt <- score + jitter(rep(0, J), amount = 0.3)
 score_adj <- (score - mean(score)) / sd(score)
 score_adj_jitt <- (score_jitt - mean(score)) / sd(score)
